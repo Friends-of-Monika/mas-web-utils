@@ -1,0 +1,3 @@
+[submodule "src/lib/spritepack-schema"]
+	path = src/lib/spritepack-schema
+	url = git@github.com:Friends-of-Monika/mas-sprite-schema.git
