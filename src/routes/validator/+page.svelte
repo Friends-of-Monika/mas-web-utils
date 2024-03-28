@@ -3,7 +3,7 @@
 	import CodeArea from "../../components/CodeArea.svelte";
 	import Message from "../../components/Message.svelte";
 
-	import { Icon, CodeBracketSquare } from "svelte-hero-icons";
+	import { Icon, CodeBracketSquare, ChevronDoubleDown } from "svelte-hero-icons";
 
 	import { readTextFile, openFilePickerDialog } from "$lib/dom";
 	import { JsonSyntaxError, ValidationError, getJsonSourceMap, validate } from "$lib/schema";
@@ -93,20 +93,19 @@
 					await validate(json);
 				} catch (e: any) {
 					error = e;
-					console.log(e, e.errors);
 				}
 			})();
 		});
 	}
 </script>
 
-<div class="w-screen h-screen">
-	<div class="w-full h-full flex justify-center place-content-around place-items-center">
-		<div class="flex flex-col place-content-center gap-2 w-1/2 h-2/3 p-[2%]">
+<div class="w-screen h-auto lg:h-screen">
+	<div class="w-full h-full flex flex-col lg:flex-row justify-center place-content-center place-items-center lg:place-content-around lg:place-items-center">
+		<div class="flex flex-col place-content-center gap-2 w-4/5 lg:w-1/2 h-[90vh] lg:h-2/3 p-[2%]">
 			<div class="text-center mb-3">
 				<h1 class="text-2xl font-medium">
 					MAS Spritepack JSON validator
-					<span class="bg-blue-600 align-super text-base text-white capitalize rounded-md px-1">Beta</span>
+					<span class="bg-blue-500 align-super text-base text-white rounded-full px-1.5">beta</span>
 				</h1>
 				<h2 class="text-xl text-gray-500">Pick a file and see if it'll work right away</h2>
 			</div>
@@ -114,14 +113,14 @@
 				{#key validatePromise}
 					{#await validatePromise}
 						<div class="flex justify-center">
-							<div class="w-2/3">
+							<div class="w-full lg:w-2/3">
 								<Message title="Validating..." text="Just a moment, your JSON is being validated." type="info" />
 							</div>
 						</div>
 					{:then _}
 						{#if error === undefined && json !== undefined}
 							<div class="flex justify-center">
-								<div class="w-2/3">
+								<div class="w-full lg:w-2/3">
 									<Message
 										title="This JSON file is valid!"
 										text="MAS should not have any trouble loading it in."
@@ -130,15 +129,19 @@
 								</div>
 							</div>
 						{:else if error instanceof JsonSyntaxError}
-							<Message
-								title="This JSON file is invalid and MAS won't even load it."
-								text="There were some JSON syntax errors that you need to resolve."
-								type="error"
-							/>
+							<div class="flex justify-center">
+								<div class="w-full lg:w-2/3">
+									<Message
+										title="This JSON file is invalid and MAS won't even load it."
+										text="There were some JSON syntax errors that you need to resolve."
+										type="error"
+									/>
+								</div>
+							</div>
 						{:else if error instanceof TypeError}
 							{#if error.message === "JSON file must end with .json"}
 								<div class="flex justify-center">
-									<div class="w-2/3">
+									<div class="w-full lg:w-2/3">
 										<Message
 											title="This isn't a JSON file."
 											text="JSON files must have a file name that ends with .json"
@@ -148,9 +151,9 @@
 								</div>
 							{:else}
 								<div class="flex justify-center">
-									<div class="w-2/3">
+									<div class="w-full lg:w-2/3">
 										<Message
-											title={`This JSON file has invalid "type" property.`}
+											title='This JSON file has invalid "type" property.'
 											text="Validator is unable to apply a spritepack JSON schema."
 											type="warning"
 										/>
@@ -158,17 +161,21 @@
 								</div>
 							{/if}
 						{:else if error instanceof ValidationError}
-							<Message
-								title="This JSON file is invalid."
-								text="MAS will fail to load this JSON file due to some issues."
-								type="warning"
-							/>
+							<div class="flex justify-center">
+								<div class="w-full lg:w-2/3">
+									<Message
+										title="This JSON file is invalid."
+										text="MAS will fail to load this JSON file due to some issues."
+										type="warning"
+									/>
+								</div>
+							</div>
 						{/if}
 						{#if error !== undefined && getErrorPreviewRange(error) !== null}
 							{#key error}
 								<!-- I have ABSOLUTELY no idea, why exactly I had to set these heights. -->
 								<!-- Apparently flex or overflow do this trickery. Works like that though. -->
-								<div class="h-2/3">
+								<div class="h-1/3 lg:h-2/3">
 									<div class="h-[82%] flex flex-col gap-4 place-content-between">
 										<div>
 											<h1 class="text-xl text-medium text-center -mb-1">Preview of what went wrong</h1>
@@ -204,21 +211,25 @@
 			{/if}
 			<div class="flex flex-col gap-2 place-items-center">
 				{#if fileName !== undefined}
-					<p class="text-lg text-gray-500 text-center mb-2">
+					<div class="flex place-content-center text-lg text-gray-500 w-full mb-2">
 						<Icon src={CodeBracketSquare} class="w-5 inline -translate-y-[1px]"/>
-						{fileName}
-					</p>
+						<span class="truncate max-w-[80%]" dir="rtl">{fileName}</span>
+					</div>
 				{/if}
 				<div class="mb-3">
 					<UploadButton on:click={onUploadClick} />
 				</div>
-				<p class="text-sm text-gray-500 text-center">
+				<div class="text-sm text-gray-500 text-center">
 					Validation is done locally, right in your browser.<br />
 					Your files <i>are not</i> sent anywhere.
-				</p>
+				</div>
 			</div>
 		</div>
-		<div class="flex flex-col place-content-center gap-4 w-1/4 h-2/3 p-[2%]">
+		<div class="flex flex-col place-items-center gap-1 h-[10vh] lg:hidden">
+			Scroll for more
+			<Icon src={ChevronDoubleDown} class="w-5 h-5"/>
+		</div>
+		<div class="flex flex-col place-content-center gap-[5vh] lg:gap-4 w-4/5 lg:w-1/4 min-h-[100vh] lg:h-2/3 p-[2%] mb-[3vh]">
 			<div>
 				<h1 class="text-2xl mb-4">Helpful links</h1>
 				<ul>
@@ -255,7 +266,7 @@
 					This validator will help you quickly (without starting up the game) check for common issues in the
 					JSON file you select. Supports both split/unsplit Accessories, Clothes and Hair spritepack JSONs.
 				</p>
-				<p class="text-gray-700 mb-[5%]">
+				<p class="text-gray-700 mb-[3vh]">
 					<b>This is public beta.</b> While this tool has been tested thoroughly on some official spritepack
 					files, it could still produce false positives/negatives &mdash; if you're absolutely sure that the
 					file is valid (or invalid), don't hesitate to test it on MAS, and consider reporting an issue.
