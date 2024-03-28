@@ -15,5 +15,6 @@ jobs:
         with: { node-version: 21 }
       - name: Install Yarn
         run: npm install -g yarn
+      - name: Install packages
       - name: Run checks
         run: yarn lint
