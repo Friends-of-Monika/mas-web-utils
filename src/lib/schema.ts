@@ -1,6 +1,6 @@
 import { Octokit } from "octokit";
 import Ajv, { type ErrorObject, type ValidateFunction } from "ajv";
-// @ts-ignore
+// @ts-expect-error because package is built with untyped JS
 import { parse } from "json-source-map";
 
 const octokit = new Octokit();
@@ -49,8 +49,8 @@ export async function validate(rawJson: string) {
 	let json: unknown;
 	try {
 		json = JSON.parse(rawJson);
-	} catch (e: any) {
-		throw new JsonSyntaxError(e);
+	} catch (e: unknown) {
+		throw new JsonSyntaxError(e as SyntaxError);
 	}
 
 	if (json === null || typeof json !== "object" || !("type" in json))
@@ -58,7 +58,7 @@ export async function validate(rawJson: string) {
 	if (!(typeof json.type === "number")) throw new TypeError(`JSON must have "type" property with number value`);
 	if (![0, 1, 2].includes(json.type)) throw new TypeError(`JSON must have 0, 1 or 2 as "type" value`);
 
-	// @ts-ignore
+	// @ts-expect-error because above 'includes' check is sufficient but unnoticed by ts
 	const type: AcsType<AcsTypeAll> = { type: json.type };
 	if (json.type === 0) Object.assign(type, { split: "arm_split" in json });
 
@@ -68,7 +68,7 @@ export async function validate(rawJson: string) {
 	throw new ValidationError(validateSchema.errors);
 }
 
-export function getJsonSourceMap(json: string): any {
+export function getJsonSourceMap(json: string): object {
 	return parse(json);
 }
 

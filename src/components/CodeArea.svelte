@@ -15,7 +15,6 @@
 
 	// Icons
 	import { Icon, ExclamationCircle } from "svelte-hero-icons";
-	import { error } from "@sveltejs/kit";
 
 	// Parameters
 	export let code: string = "";
@@ -53,10 +52,9 @@
 		await tick();
 
 		// Reload on mount
-		// @ts-ignore
 		initLineNumbers(hljs, window, document);
 		hljs.highlightElement(codeArea);
-		// @ts-ignore
+		// @ts-expect-error this codes from hljs plugin which is untyped JS
 		await hljs.lineNumbersBlock(codeArea, { startFrom: range[0] + 1 });
 		codeArea.children[0].classList.add("w-full");
 

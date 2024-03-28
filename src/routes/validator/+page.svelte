@@ -10,7 +10,7 @@
 
 	let fileName: string;
 	let json: string | undefined;
-	let source: any | undefined;
+	let source: object | undefined;
 	let error: Error | undefined;
 	let validatePromise: Promise<void>;
 
@@ -22,15 +22,15 @@
 			minLine = error.where[0];
 			maxLine = minLine;
 		} else if (error instanceof TypeError) {
-			const typeLine = getJsonPathLine("/type", source);
+			const typeLine = getJsonPathLine("/type", source!);
 			if (typeLine === null) return null;
 			minLine = typeLine;
 			maxLine = minLine;
 		} else if (error instanceof ValidationError) {
-			const lines = error.errors.map((it) => getJsonPathLine(it.instancePath, source)).filter((it) => it !== null) as [
-				number,
-				number
-			];
+			// prettier-ignore
+			const lines = error.errors
+				.map((it) => getJsonPathLine(it.instancePath, source!))
+				.filter((it) => it !== null) as [number, number];
 			minLine = Math.min(...lines);
 			maxLine = Math.max(...lines);
 		}
@@ -43,7 +43,8 @@
 	const getErrorPreviewRangeNN = (error: Error) => getErrorPreviewRange(error)!;
 	const getErrorPreviewRangeU = (error: Error) => getErrorPreviewRange(error) ?? undefined;
 
-	function getJsonPathLine(path: string, sourceMap: any): number | null {
+	function getJsonPathLine(path: string, sourceMap: object): number | null {
+		// @ts-expect-error json-source-map output is untyped
 		const ptr = sourceMap.pointers[path];
 		const line = (ptr?.key ?? ptr?.value)?.line;
 		if (line !== undefined) return line + 1;
@@ -51,16 +52,19 @@
 	}
 
 	// Exists for the same reason as above.
-	const getJsonPathLineN = (path: string, sourceMap: any) => getJsonPathLine(path, sourceMap)!;
+	const getJsonPathLineN = (path: string, sourceMap: object | undefined) => getJsonPathLine(path, sourceMap!)!;
 
 	function getValidationErrorHighlightsNN(error: ValidationError): { line: number; message: string }[] {
-		return error.errors
-			.map((it) => [source.pointers[it.instancePath]?.value?.line, it.message])
-			.filter((it) => it[0] !== undefined)
-			.map((it) => ({
-				line: it[0] + 1,
-				message: it[1]
-			}));
+		return (
+			error.errors
+				// @ts-expect-error because this still stems from untyped JS
+				.map((it) => [source?.pointers[it.instancePath]?.value?.line, it.message])
+				.filter((it) => it[0] !== undefined)
+				.map((it) => ({
+					line: it[0] + 1,
+					message: it[1]
+				}))
+		);
 	}
 
 	function onUploadClick() {
@@ -83,7 +87,7 @@
 				try {
 					JSON.parse(json);
 					source = getJsonSourceMap(json);
-				} catch (e: any) {
+				} catch (e: unknown) {
 					error = new JsonSyntaxError(e as SyntaxError);
 					return;
 				}
@@ -91,8 +95,8 @@
 				// Validate against the schema
 				try {
 					await validate(json);
-				} catch (e: any) {
-					error = e;
+				} catch (e: unknown) {
+					error = e as Error;
 				}
 			})();
 		});
@@ -119,7 +123,7 @@
 								<Message title="Validating..." text="Just a moment, your JSON is being validated." type="info" />
 							</div>
 						</div>
-					{:then _}
+					{:then}
 						{#if error === undefined && json !== undefined}
 							<div class="flex justify-center">
 								<div class="w-full lg:w-2/3">
