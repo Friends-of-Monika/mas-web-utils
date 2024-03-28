@@ -13,8 +13,10 @@
 	import { page } from "$app/stores";
 </script>
 
-<!-- Page title, description & OGP data -->
-<PageDescription url={$page.url.toString()} title={$page.data.title} description={$page.data.description} />
+{#key $page.route}
+	<!-- Page title, description & OGP data (updates whenever route changes) -->
+	<PageDescription url={$page.url.toString()} title={$page.data.title} description={$page.data.description} />
+{/key}
 
 {#key data.url}
 	<div in:fly={{ x: -200, duration: 300, delay: 300 }} out:fly={{ x: 200, duration: 300 }}>
