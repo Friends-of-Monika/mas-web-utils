@@ -1,7 +1,6 @@
 export const prerender = true;
 
 export function load({ url }) {
-    return {
-        url: url.pathname
-    }
+	// prettier-ignore
+	return { url: url.pathname };
 }

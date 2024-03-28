@@ -100,7 +100,9 @@
 </script>
 
 <div class="w-screen h-auto lg:h-screen">
-	<div class="w-full h-full flex flex-col lg:flex-row justify-center place-content-center place-items-center lg:place-content-around lg:place-items-center">
+	<div
+		class="w-full h-full flex flex-col lg:flex-row justify-center place-content-center place-items-center lg:place-content-around lg:place-items-center"
+	>
 		<div class="flex flex-col place-content-center gap-2 w-4/5 lg:w-1/2 h-[90vh] lg:h-2/3 p-[2%]">
 			<div class="text-center mb-3">
 				<h1 class="text-2xl font-medium">
@@ -152,6 +154,7 @@
 							{:else}
 								<div class="flex justify-center">
 									<div class="w-full lg:w-2/3">
+										<!-- prettier-ignore -->
 										<Message
 											title='This JSON file has invalid "type" property.'
 											text="Validator is unable to apply a spritepack JSON schema."
@@ -212,7 +215,7 @@
 			<div class="flex flex-col gap-2 place-items-center">
 				{#if fileName !== undefined}
 					<div class="flex place-content-center text-lg text-gray-500 w-full mb-2">
-						<Icon src={CodeBracketSquare} class="w-5 inline -translate-y-[1px]"/>
+						<Icon src={CodeBracketSquare} class="w-5 inline -translate-y-[1px]" />
 						<span class="truncate max-w-[80%]" dir="rtl">{fileName}</span>
 					</div>
 				{/if}
@@ -227,9 +230,11 @@
 		</div>
 		<div class="flex flex-col place-items-center gap-1 h-[10vh] lg:hidden">
 			Scroll for more
-			<Icon src={ChevronDoubleDown} class="w-5 h-5"/>
+			<Icon src={ChevronDoubleDown} class="w-5 h-5" />
 		</div>
-		<div class="flex flex-col place-content-center gap-[5vh] lg:gap-4 w-4/5 lg:w-1/4 min-h-[100vh] lg:h-2/3 p-[2%] mb-[3vh]">
+		<div
+			class="flex flex-col place-content-center gap-[5vh] lg:gap-4 w-4/5 lg:w-1/4 min-h-[100vh] lg:h-2/3 p-[2%] mb-[3vh]"
+		>
 			<div>
 				<h1 class="text-2xl mb-4">Helpful links</h1>
 				<ul>
@@ -239,7 +244,10 @@
 						</a>
 					</li>
 					<li class="text-blue-500 font-medium mb-1">
-						<a href="https://github.com/Monika-After-Story/MonikaModDev/wiki/Official-MAS-Art-PSDs-and-Guidelines" target="_blank">
+						<a
+							href="https://github.com/Monika-After-Story/MonikaModDev/wiki/Official-MAS-Art-PSDs-and-Guidelines"
+							target="_blank"
+						>
 							🎨 Official spritepack PSDs and templates
 						</a>
 					</li>
@@ -263,20 +271,18 @@
 			<div>
 				<h1 class="text-2xl mb-3">About this tool</h1>
 				<p class="text-gray-700 mb-2">
-					This validator will help you quickly (without starting up the game) check for common issues in the
-					JSON file you select. Supports both split/unsplit Accessories, Clothes and Hair spritepack JSONs.
+					This validator will help you quickly (without starting up the game) check for common issues in the JSON file
+					you select. Supports both split/unsplit Accessories, Clothes and Hair spritepack JSONs.
 				</p>
 				<p class="text-gray-700 mb-[3vh]">
-					<b>This is public beta.</b> While this tool has been tested thoroughly on some official spritepack
-					files, it could still produce false positives/negatives &mdash; if you're absolutely sure that the
-					file is valid (or invalid), don't hesitate to test it on MAS, and consider reporting an issue.
+					<b>This is public beta.</b> While this tool has been tested thoroughly on some official spritepack files, it could
+					still produce false positives/negatives &mdash; if you're absolutely sure that the file is valid (or invalid),
+					don't hesitate to test it on MAS, and consider reporting an issue.
 				</p>
 				<p class="text-gray-500 text-center">
 					Made by
 					<span class="text-blue-500 font-medium">
-						<a href="https://github.com/Friends-of-Monika" target="_blank">
-							Friends of Monika
-						</a>
+						<a href="https://github.com/Friends-of-Monika" target="_blank"> Friends of Monika </a>
 					</span>
 					❤️
 				</p>
