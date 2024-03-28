@@ -10,7 +10,7 @@
 
 	let fileName: string;
 	let json: string | undefined;
-	let source: any | undefined;
+	let source: object | undefined;
 	let error: Error | undefined;
 	let validatePromise: Promise<void>;
 
@@ -22,15 +22,15 @@
 			minLine = error.where[0];
 			maxLine = minLine;
 		} else if (error instanceof TypeError) {
-			const typeLine = getJsonPathLine("/type", source);
+			const typeLine = getJsonPathLine("/type", source!);
 			if (typeLine === null) return null;
 			minLine = typeLine;
 			maxLine = minLine;
 		} else if (error instanceof ValidationError) {
-			const lines = error.errors.map((it) => getJsonPathLine(it.instancePath, source)).filter((it) => it !== null) as [
-				number,
-				number
-			];
+			// prettier-ignore
+			const lines = error.errors
+				.map((it) => getJsonPathLine(it.instancePath, source!))
+				.filter((it) => it !== null) as [number, number];
 			minLine = Math.min(...lines);
 			maxLine = Math.max(...lines);
 		}
@@ -43,7 +43,8 @@
 	const getErrorPreviewRangeNN = (error: Error) => getErrorPreviewRange(error)!;
 	const getErrorPreviewRangeU = (error: Error) => getErrorPreviewRange(error) ?? undefined;
 
-	function getJsonPathLine(path: string, sourceMap: any): number | null {
+	function getJsonPathLine(path: string, sourceMap: object): number | null {
+		// @ts-expect-error json-source-map output is untyped
 		const ptr = sourceMap.pointers[path];
 		const line = (ptr?.key ?? ptr?.value)?.line;
 		if (line !== undefined) return line + 1;
@@ -51,16 +52,19 @@
 	}
 
 	// Exists for the same reason as above.
-	const getJsonPathLineN = (path: string, sourceMap: any) => getJsonPathLine(path, sourceMap)!;
+	const getJsonPathLineN = (path: string, sourceMap: object | undefined) => getJsonPathLine(path, sourceMap!)!;
 
 	function getValidationErrorHighlightsNN(error: ValidationError): { line: number; message: string }[] {
-		return error.errors
-			.map((it) => [source.pointers[it.instancePath]?.value?.line, it.message])
-			.filter((it) => it[0] !== undefined)
-			.map((it) => ({
-				line: it[0] + 1,
-				message: it[1]
-			}));
+		return (
+			error.errors
+				// @ts-expect-error because this still stems from untyped JS
+				.map((it) => [source?.pointers[it.instancePath]?.value?.line, it.message])
+				.filter((it) => it[0] !== undefined)
+				.map((it) => ({
+					line: it[0] + 1,
+					message: it[1]
+				}))
+		);
 	}
 
 	function onUploadClick() {
@@ -83,7 +87,7 @@
 				try {
 					JSON.parse(json);
 					source = getJsonSourceMap(json);
-				} catch (e: any) {
+				} catch (e: unknown) {
 					error = new JsonSyntaxError(e as SyntaxError);
 					return;
 				}
@@ -91,21 +95,23 @@
 				// Validate against the schema
 				try {
 					await validate(json);
-				} catch (e: any) {
-					error = e;
+				} catch (e: unknown) {
+					error = e as Error;
 				}
 			})();
 		});
 	}
 </script>
 
-<div class="w-screen h-auto lg:h-screen">
-	<div class="w-full h-full flex flex-col lg:flex-row justify-center place-content-center place-items-center lg:place-content-around lg:place-items-center">
-		<div class="flex flex-col place-content-center gap-2 w-4/5 lg:w-1/2 h-[90vh] lg:h-2/3 p-[2%]">
-			<div class="text-center mb-3">
+<div class="h-auto w-screen lg:h-screen">
+	<div
+		class="flex h-full w-full flex-col place-content-center place-items-center justify-center lg:flex-row lg:place-content-around lg:place-items-center"
+	>
+		<div class="flex h-[90vh] w-4/5 flex-col place-content-center gap-2 p-[2%] lg:h-2/3 lg:w-1/2">
+			<div class="mb-3 text-center">
 				<h1 class="text-2xl font-medium">
 					MAS Spritepack JSON validator
-					<span class="bg-blue-500 align-super text-base text-white rounded-full px-1.5">beta</span>
+					<span class="rounded-full bg-blue-500 px-1.5 align-super text-base text-white">beta</span>
 				</h1>
 				<h2 class="text-xl text-gray-500">Pick a file and see if it'll work right away</h2>
 			</div>
@@ -117,7 +123,7 @@
 								<Message title="Validating..." text="Just a moment, your JSON is being validated." type="info" />
 							</div>
 						</div>
-					{:then _}
+					{:then}
 						{#if error === undefined && json !== undefined}
 							<div class="flex justify-center">
 								<div class="w-full lg:w-2/3">
@@ -152,6 +158,7 @@
 							{:else}
 								<div class="flex justify-center">
 									<div class="w-full lg:w-2/3">
+										<!-- prettier-ignore -->
 										<Message
 											title='This JSON file has invalid "type" property.'
 											text="Validator is unable to apply a spritepack JSON schema."
@@ -176,10 +183,10 @@
 								<!-- I have ABSOLUTELY no idea, why exactly I had to set these heights. -->
 								<!-- Apparently flex or overflow do this trickery. Works like that though. -->
 								<div class="h-1/3 lg:h-2/3">
-									<div class="h-[82%] flex flex-col gap-4 place-content-between">
+									<div class="flex h-[82%] flex-col place-content-between gap-4">
 										<div>
-											<h1 class="text-xl text-medium text-center -mb-1">Preview of what went wrong</h1>
-											<h2 class="text-md text-gray-500 text-center -mb-2">Only relevant parts are shown</h2>
+											<h1 class="text-medium -mb-1 text-center text-xl">Preview of what went wrong</h1>
+											<h2 class="text-md -mb-2 text-center text-gray-500">Only relevant parts are shown</h2>
 										</div>
 										<div class="h-4/5">
 											{#if error instanceof JsonSyntaxError}
@@ -209,51 +216,56 @@
 					{/await}
 				{/key}
 			{/if}
-			<div class="flex flex-col gap-2 place-items-center">
+			<div class="flex flex-col place-items-center gap-2">
 				{#if fileName !== undefined}
-					<div class="flex place-content-center text-lg text-gray-500 w-full mb-2">
-						<Icon src={CodeBracketSquare} class="w-5 inline -translate-y-[1px]"/>
-						<span class="truncate max-w-[80%]" dir="rtl">{fileName}</span>
+					<div class="mb-2 flex w-full place-content-center text-lg text-gray-500">
+						<Icon src={CodeBracketSquare} class="inline w-5 -translate-y-[1px]" />
+						<span class="max-w-[80%] truncate" dir="rtl">{fileName}</span>
 					</div>
 				{/if}
 				<div class="mb-3">
 					<UploadButton on:click={onUploadClick} />
 				</div>
-				<div class="text-sm text-gray-500 text-center">
+				<div class="text-center text-sm text-gray-500">
 					Validation is done locally, right in your browser.<br />
 					Your files <i>are not</i> sent anywhere.
 				</div>
 			</div>
 		</div>
-		<div class="flex flex-col place-items-center gap-1 h-[10vh] lg:hidden">
+		<div class="flex h-[10vh] flex-col place-items-center gap-1 lg:hidden">
 			Scroll for more
-			<Icon src={ChevronDoubleDown} class="w-5 h-5"/>
+			<Icon src={ChevronDoubleDown} class="h-5 w-5" />
 		</div>
-		<div class="flex flex-col place-content-center gap-[5vh] lg:gap-4 w-4/5 lg:w-1/4 min-h-[100vh] lg:h-2/3 p-[2%] mb-[3vh]">
+		<div
+			class="mb-[3vh] flex min-h-[100vh] w-4/5 flex-col place-content-center gap-[5vh] p-[2%] lg:h-2/3 lg:w-1/4 lg:gap-4"
+		>
 			<div>
-				<h1 class="text-2xl mb-4">Helpful links</h1>
+				<h1 class="mb-4 text-2xl">Helpful links</h1>
 				<ul>
-					<li class="text-blue-500 font-medium mb-1">
+					<li class="mb-1 font-medium text-blue-500">
 						<a href="https://github.com/Monika-After-Story/MonikaModDev/wiki/Adding-Sprite-Objects" target="_blank">
 							📄 Official spritepacks documentation
 						</a>
 					</li>
-					<li class="text-blue-500 font-medium mb-1">
-						<a href="https://github.com/Monika-After-Story/MonikaModDev/wiki/Official-MAS-Art-PSDs-and-Guidelines" target="_blank">
+					<li class="mb-1 font-medium text-blue-500">
+						<a
+							href="https://github.com/Monika-After-Story/MonikaModDev/wiki/Official-MAS-Art-PSDs-and-Guidelines"
+							target="_blank"
+						>
 							🎨 Official spritepack PSDs and templates
 						</a>
 					</li>
-					<li class="text-blue-500 font-medium mb-1">
+					<li class="mb-1 font-medium text-blue-500">
 						<a href="https://github.com/Friends-of-Monika/mas-web-utils" target="_blank">
 							🧪 MAS Web Utils Github repository
 						</a>
 					</li>
-					<li class="text-blue-500 font-medium mb-1">
+					<li class="mb-1 font-medium text-blue-500">
 						<a href="https://github.com/Friends-of-Monika/mas-sprite-schema" target="_blank">
 							🔍 MAS Spritepack JSON schema repository
 						</a>
 					</li>
-					<li class="text-blue-500 font-medium">
+					<li class="font-medium text-blue-500">
 						<a href="https://github.com/Friends-of-Monika/mas-web-utils/issues/new" target="_blank">
 							🐛 Report an issue
 						</a>
@@ -261,22 +273,20 @@
 				</ul>
 			</div>
 			<div>
-				<h1 class="text-2xl mb-3">About this tool</h1>
-				<p class="text-gray-700 mb-2">
-					This validator will help you quickly (without starting up the game) check for common issues in the
-					JSON file you select. Supports both split/unsplit Accessories, Clothes and Hair spritepack JSONs.
+				<h1 class="mb-3 text-2xl">About this tool</h1>
+				<p class="mb-2 text-gray-700">
+					This validator will help you quickly (without starting up the game) check for common issues in the JSON file
+					you select. Supports both split/unsplit Accessories, Clothes and Hair spritepack JSONs.
 				</p>
-				<p class="text-gray-700 mb-[3vh]">
-					<b>This is public beta.</b> While this tool has been tested thoroughly on some official spritepack
-					files, it could still produce false positives/negatives &mdash; if you're absolutely sure that the
-					file is valid (or invalid), don't hesitate to test it on MAS, and consider reporting an issue.
+				<p class="mb-[3vh] text-gray-700">
+					<b>This is public beta.</b> While this tool has been tested thoroughly on some official spritepack files, it could
+					still produce false positives/negatives &mdash; if you're absolutely sure that the file is valid (or invalid),
+					don't hesitate to test it on MAS, and consider reporting an issue.
 				</p>
-				<p class="text-gray-500 text-center">
+				<p class="text-center text-gray-500">
 					Made by
-					<span class="text-blue-500 font-medium">
-						<a href="https://github.com/Friends-of-Monika" target="_blank">
-							Friends of Monika
-						</a>
+					<span class="font-medium text-blue-500">
+						<a href="https://github.com/Friends-of-Monika" target="_blank"> Friends of Monika </a>
 					</span>
 					❤️
 				</p>

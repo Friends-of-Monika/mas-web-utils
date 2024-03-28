@@ -3,8 +3,7 @@
 	import "../app.css";
 
 	import { fly } from "svelte/transition";
-
-	export let data: any;
+	export let data: Record<string, unknown>;
 </script>
 
 {#key data.url}

@@ -15,7 +15,6 @@
 
 	// Icons
 	import { Icon, ExclamationCircle } from "svelte-hero-icons";
-	import { error } from "@sveltejs/kit";
 
 	// Parameters
 	export let code: string = "";
@@ -53,10 +52,9 @@
 		await tick();
 
 		// Reload on mount
-		// @ts-ignore
 		initLineNumbers(hljs, window, document);
 		hljs.highlightElement(codeArea);
-		// @ts-ignore
+		// @ts-expect-error this codes from hljs plugin which is untyped JS
 		await hljs.lineNumbersBlock(codeArea, { startFrom: range[0] + 1 });
 		codeArea.children[0].classList.add("w-full");
 
@@ -80,8 +78,8 @@
 </script>
 
 <!-- This is formatted like this INTENTIONALLY. Do not edit. -->
-<div class={`${themeClass} w-full h-full`}>
-	<pre class="w-full h-full overflow-visible">
-		<code bind:this={codeArea} class="rounded-md language-json w-full max-h-full overflow-auto">{codeLines}</code>
+<div class={`${themeClass} h-full w-full`}>
+	<pre class="h-full w-full overflow-visible">
+		<code bind:this={codeArea} class="language-json max-h-full w-full overflow-auto rounded-md">{codeLines}</code>
 	</pre>
 </div>

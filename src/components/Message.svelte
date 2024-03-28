@@ -13,12 +13,12 @@
 	};
 </script>
 
-<div class="{theme[type][0]} {theme[type][1]} rounded-md shadow-md shadow-gray-300 p-2 mb-4">
+<div class="{theme[type][0]} {theme[type][1]} mb-4 rounded-md p-2 shadow-md shadow-gray-300">
 	<div class="flex flex-row">
-		<div class="flex place-content-center w-12">
+		<div class="flex w-12 place-content-center">
 			<Icon src={theme[type][2]} solid class="w-10 {theme[type][3] ?? ''}" />
 		</div>
-		<div class="flex-col ml-2">
+		<div class="ml-2 flex-col">
 			<h1 class="text-lg font-medium">{title}</h1>
 			<p class="text-base">{text}</p>
 		</div>
