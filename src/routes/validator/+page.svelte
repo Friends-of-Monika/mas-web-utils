@@ -22,6 +22,7 @@
 			minLine = error.where[0];
 			maxLine = minLine;
 		} else if (error instanceof TypeError) {
+			if (source === undefined) return null;
 			const typeLine = getJsonPathLine("/type", source!);
 			if (typeLine === null) return null;
 			minLine = typeLine;
