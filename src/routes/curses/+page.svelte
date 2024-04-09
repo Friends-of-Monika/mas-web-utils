@@ -3,6 +3,7 @@
 	import NameInput from "../../components/NameInput.svelte";
 	import Message from "../../components/Message.svelte";
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let libCurses: any;
 	import { onMount } from "svelte";
 
