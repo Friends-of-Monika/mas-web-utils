@@ -11,6 +11,7 @@
 
 	let name: string;
 	let matchKey: string;
+	let matchRule: RegExp;
 
 	onMount(async () => {
 		libCurses = await import("$lib/curses");
@@ -19,7 +20,9 @@
 	});
 
 	function onNameInput(e: Event) {
-		matchKey = libCurses.checkName((e.target as HTMLInputElement).value, regexps);
+		name = (e.target as HTMLInputElement).value;
+		const match = libCurses.checkName(name, regexps);
+		[matchKey, matchRule] = match ?? [null, null];
 	}
 </script>
 
@@ -63,6 +66,9 @@
 					<div class="mb-3">
 						<NameInput on:input={onNameInput}/>
 					</div>
+					{#if matchRule}
+						<p class="text-center">Matched rule: <span class="font-mono bg-neutral-200 rounded-md py-0.5 px-1">{matchRule.toString()}</span></p>
+					{/if}
 				</div>
 			{/await}
 		</div>
