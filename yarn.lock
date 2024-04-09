@@ -834,6 +834,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/antlr4@npm:4.7.2":
+  version: 4.7.2
+  resolution: "@types/antlr4@npm:4.7.2"
+  checksum: 10c0/458ef8fe4c0525db630e588221978151b6b827bc16dee5ff3ed4ed9f529d750afd1dd54453f87e80bfa8e39f9abb1b7207d38b678cd7151bf090d59765917912
+  languageName: node
+  linkType: hard
+
 "@types/aws-lambda@npm:^8.10.83":
   version: 8.10.136
   resolution: "@types/aws-lambda@npm:8.10.136"
@@ -1139,6 +1146,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"antlr4@npm:4.8.0":
+  version: 4.8.0
+  resolution: "antlr4@npm:4.8.0"
+  checksum: 10c0/f2b836f7439f05719bd12f9e124ec8e276aa5a270d53de26a10f48700b6ba9563204a66d8bfbb94f4fb44d7c4455780a49d57fb0c25257912f3d456b6e2d6208
+  languageName: node
+  linkType: hard
+
 "any-promise@npm:^1.0.0":
   version: 1.3.0
   resolution: "any-promise@npm:1.3.0"
@@ -1417,6 +1431,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"comlink@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "comlink@npm:4.4.1"
+  checksum: 10c0/a7a2004030768d13ec9373f780aa0edae57616095cb453ec8950d9f97e5fa654c0e84030ac87173b818843a04a5fa9ce9749d48b6bd453cfbfb5e6a9ebb6b2ff
+  languageName: node
+  linkType: hard
+
 "commander@npm:^4.0.0":
   version: 4.1.1
   resolution: "commander@npm:4.1.1"
@@ -1563,6 +1584,16 @@ __metadata:
   dependencies:
     esutils: "npm:^2.0.2"
   checksum: 10c0/c96bdccabe9d62ab6fea9399fdff04a66e6563c1d6fb3a3a063e8d53c3bb136ba63e84250bbf63d00086a769ad53aef92d2bd483f03f837fc97b71cbee6b2520
+  languageName: node
+  linkType: hard
+
+"dt-python-parser@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "dt-python-parser@npm:0.9.0"
+  dependencies:
+    "@types/antlr4": "npm:4.7.2"
+    antlr4: "npm:4.8.0"
+  checksum: 10c0/e19fa72c30346dfdd0b979c12333f3e1bce62bc81116d3936f4c1e1a2a71676d1e306d923b95a997c80c1c47219409af6fbad25555d366f1f7ef5cfcd61b710f
   languageName: node
   linkType: hard
 
@@ -2701,6 +2732,8 @@ __metadata:
     "@typescript-eslint/parser": "npm:^7.0.0"
     ajv: "npm:^8.12.0"
     autoprefixer: "npm:^10.4.18"
+    comlink: "npm:^4.4.1"
+    dt-python-parser: "npm:^0.9.0"
     eslint: "npm:^8.56.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-svelte: "npm:^2.35.1"
