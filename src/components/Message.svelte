@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Icon, InformationCircle, ExclamationTriangle, ExclamationCircle, CheckCircle } from "svelte-hero-icons";
+	import { Icon, InformationCircle, ExclamationTriangle, ExclamationCircle, CheckCircle, QuestionMarkCircle } from "svelte-hero-icons";
 
 	export let title: string = "";
 	export let text: string = "";
@@ -9,7 +9,8 @@
 		info: ["bg-info-bg", "text-info-text", InformationCircle],
 		warning: ["bg-warning-bg", "text-warning-text", ExclamationTriangle, "translate-y-[2px]"],
 		error: ["bg-error-bg", "text-error-text", ExclamationCircle],
-		good: ["bg-good-bg", "text-good-text", CheckCircle]
+		good: ["bg-good-bg", "text-good-text", CheckCircle],
+		neutral: ["bg-neutral-400", "text-white", QuestionMarkCircle]
 	};
 </script>
 
