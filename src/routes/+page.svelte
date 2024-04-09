@@ -7,6 +7,7 @@
 		<div class="flex flex-col justify-center">
 			<ul>
 				<li class="font-medium text-blue-500"><a href="/validator">🔧 JSON Validator</a></li>
+				<li class="font-medium text-blue-500"><a href="/curses">🤬 Name Checker</a></li>
 			</ul>
 		</div>
 		<div class="flex h-1/3 flex-col justify-end">
