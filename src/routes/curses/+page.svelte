@@ -50,24 +50,46 @@
 						{#if matchKey === undefined || name?.length === 0}
 							<Message title="Enter your name" text="To check a name, type it in the box below." type="neutral" />
 						{:else if !matchKey}
-							<Message title="This name is okay" text="Not bad, but nothing too special either. A good choice." type="neutral" />
+							<Message
+								title="This name is okay"
+								text="Not bad, but nothing too special either. A good choice."
+								type="neutral"
+							/>
 						{:else if matchKey === "playerGood"}
-							<Message title="This name is good!" text="If you name yourself like that, Monika will like it." type="good" />
+							<Message
+								title="This name is good!"
+								text="If you name yourself like that, Monika will like it."
+								type="good"
+							/>
 						{:else if matchKey === "monikaGood"}
-							<Message title="This name is good!" text="If you give your Monika this name, she will like it." type="good" />
+							<Message
+								title="This name is good!"
+								text="If you give your Monika this name, she will like it."
+								type="good"
+							/>
 						{:else if matchKey === "awkward"}
-							<Message title="This name is... awkward." text="If you try to name yourself or your Monika like that, she will not like it." type="warning" />
+							<Message
+								title="This name is... awkward."
+								text="If you try to name yourself or your Monika like that, she will not like it."
+								type="warning"
+							/>
 						{:else if matchKey === "bad"}
-							<Message title="This name is terrible!" text="If you try to name yourself or your Monika like that, she will be furious!" type="error" />
+							<Message
+								title="This name is terrible!"
+								text="If you try to name yourself or your Monika like that, she will be furious!"
+								type="error"
+							/>
 						{/if}
 					</div>
 				</div>
 				<div class="flex flex-col place-items-center gap-2">
 					<div class="mb-3">
-						<NameInput on:input={onNameInput}/>
+						<NameInput on:input={onNameInput} />
 					</div>
 					{#if matchRule}
-						<p class="text-center">Matched rule: <span class="font-mono bg-neutral-200 rounded-md py-0.5 px-1">{matchRule.toString()}</span></p>
+						<p class="text-center">
+							Matched rule: <span class="rounded-md bg-neutral-200 px-1 py-0.5 font-mono">{matchRule.toString()}</span>
+						</p>
 					{/if}
 				</div>
 			{/await}

@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { Icon, InformationCircle, ExclamationTriangle, ExclamationCircle, CheckCircle, QuestionMarkCircle } from "svelte-hero-icons";
+	import {
+		Icon,
+		InformationCircle,
+		ExclamationTriangle,
+		ExclamationCircle,
+		CheckCircle,
+		QuestionMarkCircle
+	} from "svelte-hero-icons";
 
 	export let title: string = "";
 	export let text: string = "";
