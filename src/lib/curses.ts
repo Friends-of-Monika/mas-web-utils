@@ -52,8 +52,11 @@ function getListStringContents(tokens: SimpleToken[], varName: string): string[]
 		);
 }
 
-export function checkName(name: string, regExps: Record<string, RegExp[]>): string | null {
-	const found = Object.entries(regExps).find(([_, re]) => re.find((it) => it.test(name)));
-	if (found === undefined) return null;
-	return found[0];
+export function checkName(name: string, regExps: Record<string, RegExp[]>): [string, RegExp] | null {
+	// @prettier-ignore
+	const found = Object.entries(regExps)
+		.map(([key, re]) => [key, re.find((it) => it.test(name))])
+		.filter((it) => it[1]);
+	if (found.length === 0) return null;
+	return found[0] as [string, RegExp];
 }
