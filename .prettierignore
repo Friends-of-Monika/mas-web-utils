@@ -5,3 +5,6 @@ yarn.lock
 
 # Ignore third-party libs
 src/highlight/*.js
+
+# Yarn releases
+.yarn/releases/**
