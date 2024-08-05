@@ -7,6 +7,7 @@
 	import UploadButton from "../../components/UploadButton.svelte";
 	import CodeArea from "../../components/CodeArea.svelte";
 	import Message from "../../components/Message.svelte";
+	import BetaTag from "../../components/BetaTag.svelte";
 
 	import { Icon, CodeBracketSquare } from "svelte-hero-icons";
 
@@ -111,8 +112,7 @@
 
 <ToolLayout>
 	<svelte:fragment slot="title">
-		MAS Spritepack JSON validator
-		<span class="rounded-full bg-blue-500 px-1.5 align-super text-base text-white">beta</span>
+		MAS Spritepack JSON validator <BetaTag />
 	</svelte:fragment>
 	<svelte:fragment slot="subtitle">Pick a file and see if it'll work right away</svelte:fragment>
 	<svelte:fragment slot="tool">
