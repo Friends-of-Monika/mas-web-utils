@@ -1,15 +1,16 @@
 <script lang="ts">
 	// Main tool layout
 	import ToolLayout from "../../layouts/ToolLayout.svelte";
+	import SideLink from "../../components/SideLink.svelte";
 	import SideParagraph from "../../components/SideParagraph.svelte";
 
 	import NameInput from "../../components/NameInput.svelte";
 	import Message from "../../components/Message.svelte";
+	import BetaTag from "../../components/BetaTag.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let libCurses: any;
 	import { onMount } from "svelte";
-	import SideLink from "../../components/SideLink.svelte";
 
 	let regexps: Record<string, RegExp[]>;
 	let loadingPromise: Promise<Record<string, RegExp[]>>;
@@ -33,8 +34,7 @@
 
 <ToolLayout>
 	<svelte:fragment slot="title">
-		MAS Name Checker
-		<span class="rounded-full bg-blue-500 px-1.5 align-super text-base text-white">beta</span>
+		MAS Name Checker <BetaTag />
 	</svelte:fragment>
 	<svelte:fragment slot="subtitle">Check if a name is good, bad, awkward or okay with Monika</svelte:fragment>
 	<svelte:fragment slot="tool">
