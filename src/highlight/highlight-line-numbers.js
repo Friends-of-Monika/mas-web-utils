@@ -1,4 +1,5 @@
 // jshint multistr:true
+// @ts-nocheck
 
 /// Copied (almost) verbatim with minor changes from https://github.com/wcoder/highlightjs-line-numbers.js/blob/aa4e697e8fd7a06f34f8b74401d3d58a03ffbc10/src/highlightjs-line-numbers.js
 /// Changes include promisifying async(...) helper function.
