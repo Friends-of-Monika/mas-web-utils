@@ -95,15 +95,13 @@
 		{/await}
 	</svelte:fragment>
 	<svelte:fragment slot="links">
-		<SideLink href="https://github.com/Monika-After-Story/MonikaModDev/blob/06baf319a34c2ef585bc7c0a1e969a7eaa894b35/Monika%20After%20Story/game/script-story-events.rpy#L222-L476">
+		<SideLink
+			href="https://github.com/Monika-After-Story/MonikaModDev/blob/06baf319a34c2ef585bc7c0a1e969a7eaa894b35/Monika%20After%20Story/game/script-story-events.rpy#L222-L476"
+		>
 			📜 MAS Source code to classify names
 		</SideLink>
-		<SideLink href="https://github.com/Friends-of-Monika/mas-web-utils">
-			🧪 MAS Web Utils Github repository
-		</SideLink>
-		<SideLink href="https://github.com/Friends-of-Monika/mas-web-utils/issues/new">
-			🐛 Report an issue
-		</SideLink>
+		<SideLink href="https://github.com/Friends-of-Monika/mas-web-utils">🧪 MAS Web Utils Github repository</SideLink>
+		<SideLink href="https://github.com/Friends-of-Monika/mas-web-utils/issues/new">🐛 Report an issue</SideLink>
 	</svelte:fragment>
 	<svelte:fragment slot="about">
 		<SideParagraph>
@@ -111,8 +109,8 @@
 			patience.
 		</SideParagraph>
 		<SideParagraph>
-			<b>This is public beta.</b> While this tool has been tested, it could still produce false positives/negatives
-			&mdash; if you're absolutely sure that the result is incorrect consider reporting an issue.
+			<b>This is public beta.</b> While this tool has been tested, it could still produce false positives/negatives &mdash;
+			if you're absolutely sure that the result is incorrect consider reporting an issue.
 		</SideParagraph>
 	</svelte:fragment>
 </ToolLayout>
