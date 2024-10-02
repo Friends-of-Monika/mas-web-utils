@@ -2773,7 +2773,7 @@ __metadata:
     prettier: "npm:^3.1.1"
     prettier-plugin-svelte: "npm:^3.1.2"
     prettier-plugin-tailwindcss: "npm:^0.5.13"
-    svelte: "npm:^4.2.7"
+    svelte: "npm:^4.2.19"
     svelte-check: "npm:^3.6.0"
     svelte-hero-icons: "npm:^5.1.0"
     tailwindcss: "npm:^3.4.1"
@@ -4031,9 +4031,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^4.2.7":
-  version: 4.2.12
-  resolution: "svelte@npm:4.2.12"
+"svelte@npm:^4.2.19":
+  version: 4.2.19
+  resolution: "svelte@npm:4.2.19"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -4049,7 +4049,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.4"
     periscopic: "npm:^3.1.0"
-  checksum: 10c0/779e0515a2f7d67440e46ef82201072d531b33814ea2e24bef144637f8b22570611999dc68c3f5f2f056b68e980796116a7462eff7d29e57eb71d0893a6483e1
+  checksum: 10c0/77700133e90f86da3072ebfd5e8546b4ebe7296424bd65f89a7247fbcbae5dc56f56d15154e2a929ee3aa7da018cb5d5db24b99b7cb72f0ba2db2ad966d603dc
   languageName: node
   linkType: hard
 
