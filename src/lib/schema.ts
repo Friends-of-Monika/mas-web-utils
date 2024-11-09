@@ -2,6 +2,7 @@ import { Octokit } from "octokit";
 import Ajv, { type ErrorObject, type ValidateFunction } from "ajv";
 // @ts-expect-error because package is built with untyped JS
 import { parse } from "json-source-map";
+import { getCache, setCache } from "./localCache";
 
 const octokit = new Octokit();
 const repoParam = {
@@ -33,16 +34,25 @@ async function getCacheSchema(acs: AcsType<0 | 1 | 2>): Promise<ValidateFunction
 	const hit = schemaCache[name];
 	if (hit !== undefined) return hit;
 
+	const json = await getSchemaText(name);
+	const schema = ajv.compile(JSON.parse(json));
+	schemaCache[name] = schema;
+	return schema;
+}
+
+async function getSchemaText(name: string): Promise<string> {
+	const cachedSchema = getCache<string>("schema_schemaText");
+	if (cachedSchema != null) return cachedSchema;
+
 	const res = await octokit.rest.repos.getContent({
 		...repoParam,
 		path: name,
 		mediaType: { format: "raw" }
 	});
 
-	const json = res.data.toString();
-	const schema = ajv.compile(JSON.parse(json));
-	schemaCache[name] = schema;
-	return schema;
+	const text = res.data.toString();
+	setCache("schema_schemaText", text, 3600e3);
+	return text;
 }
 
 export async function validate(rawJson: string) {
