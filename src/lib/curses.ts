@@ -1,5 +1,6 @@
 import { Octokit } from "octokit";
 import { tokenize, type SimpleToken } from "./python";
+import { getCache, setCache } from "./localCache";
 
 const octokit = new Octokit();
 const repoParam = {
@@ -28,11 +29,8 @@ export async function getNameRegexps() {
 }
 
 async function getScriptTokens(): Promise<SimpleToken[]> {
-	const cursesTokensRaw = localStorage.getItem("curses_tokens");
-	if (cursesTokensRaw != null) {
-		const { tokens, ttl }: { tokens: SimpleToken[], ttl: number } = JSON.parse(cursesTokensRaw);
-		if (new Date(ttl).getTime() > new Date().getTime()) return tokens;
-	}
+	const cachedTokens = getCache<SimpleToken[]>("curses_tokens");
+	if (cachedTokens != null) return cachedTokens;
 
 	const res = await octokit.rest.repos.getContent({
 		...repoParam,
@@ -42,10 +40,7 @@ async function getScriptTokens(): Promise<SimpleToken[]> {
 
 	const script = res.data.toString();
 	const tokens = await tokenize(script);
-
-	const ttl = new Date().getTime() + 86400e3;
-	const cursesTokens = JSON.stringify({ tokens, ttl });
-	localStorage.setItem("curses_tokens", cursesTokens);
+	setCache("curses_tokens", tokens, 86400e3);
 
 	return tokens;
 }
