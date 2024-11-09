@@ -11,14 +11,7 @@ const repoParam = {
 const regexpLookupPath = "Monika After Story/game/script-story-events.rpy";
 
 export async function getNameRegexps() {
-	const res = await octokit.rest.repos.getContent({
-		...repoParam,
-		path: regexpLookupPath,
-		mediaType: { format: "raw" }
-	});
-
-	const script = res.data.toString();
-	const tokens = await tokenize(script);
+	const tokens = await getScriptTokens();
 
 	const badNicknames = getListStringContents(tokens, "mas_bad_nickname_list");
 	const goodNicknamesBase = getListStringContents(tokens, "mas_good_nickname_list_base");
@@ -32,6 +25,29 @@ export async function getNameRegexps() {
 	const monikaGood = [...goodNicknamesBase, ...goodNicknamesMonikaMod].map(toRegExp);
 	const awkward = awkwardNicknames.map(toRegExp);
 	return { bad, awkward, playerGood, monikaGood };
+}
+
+async function getScriptTokens(): Promise<SimpleToken[]> {
+	const cursesTokensRaw = localStorage.getItem("curses_tokens");
+	if (cursesTokensRaw != null) {
+		const { tokens, ttl }: { tokens: SimpleToken[], ttl: number } = JSON.parse(cursesTokensRaw);
+		if (new Date(ttl).getTime() > new Date().getTime()) return tokens;
+	}
+
+	const res = await octokit.rest.repos.getContent({
+		...repoParam,
+		path: regexpLookupPath,
+		mediaType: { format: "raw" }
+	});
+
+	const script = res.data.toString();
+	const tokens = await tokenize(script);
+
+	const ttl = new Date().getTime() + 86400e3;
+	const cursesTokens = JSON.stringify({ tokens, ttl });
+	localStorage.setItem("curses_tokens", cursesTokens);
+
+	return tokens;
 }
 
 function getListStringContents(tokens: SimpleToken[], varName: string): string[] {
